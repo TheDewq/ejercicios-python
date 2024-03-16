@@ -16,4 +16,4 @@ def determinar_anagrama(palabra1, palabra2):
             return False
     return True
 
-print(determinar_anagrama("amor", "amor"))
+print(determinar_anagrama(input("ingrese una palabra: "), input("ingrese una palabra")))
