@@ -9,4 +9,4 @@ if genero == "M":
 else:
     genero = -161
 
-print(calc.calcular_calorias_en_reposo(peso, altura, edad, genero))
+print(calc.calcular_calo81rias_en_reposo(peso, altura, edad, genero))
