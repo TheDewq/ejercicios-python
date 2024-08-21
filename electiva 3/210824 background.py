@@ -11,13 +11,8 @@ bg = pygame.transform.scale(bg, screen_size)
 bg2 = bg
 
 bg_y = 0
-bg2_y = screen_size[1]
+bg2_y = screen_size[0]
 
-
-
-screen.blit(bg, (0,0))
-
-pygame.display.update()
 
 while True:
     for event in pygame.event.get():
@@ -26,14 +21,18 @@ while True:
 
     bg_y += 1
     bg2_y += 1
-    if bg_y == screen_size[1]:
-        bg_y = screen_size[1] * -1
+    if bg_y == screen_size[0]:
+        bg_y = 0
 
-    if bg2_y == screen_size[1]:
-        bg2_y = screen_size[1] * -1
+    if bg2_y == screen_size[0]:
+        bg2_y = 0   
 
     screen.blit(bg, (bg_y, 0))
     screen.blit(bg2, (bg2_y, 0))
 
     pygame.display.update()
+
+    pygame.display.flip()
     
+
+    #no funciona adecuadamente la traslasion de los backgrounds
