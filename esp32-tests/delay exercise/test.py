@@ -20,7 +20,7 @@ def led_inter():
     
     while True:
         try:
-            delay = nvs.get_i32("LED_DELAY")
+            delay = nvs.get_i32("LED_DELAY") / 4
             print("current delay is "+str(delay))
             led.value(1)
             time.sleep(delay)

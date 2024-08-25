@@ -25,14 +25,16 @@ test.bluetooth_connect()
 #start pin thread
 
 
-def change_nvs_delay(pin):
+def change_PWM_delay(pin):
     print("changing delay...")
     delay = nvs.get_i32("LED_DELAY")
-    if delay >= 1 and delay < 3:
-        delay += 1
-        print("new delay: "+str(delay))
-    if delay == 3:
+    delay = delay + 1
+    if delay > 16:
         delay = 1
+        
+    
+    
+    print("new delay: "+str(delay))
         
     nvs.set_i32("LED_DELAY", delay)
     nvs.commit()
