@@ -8,6 +8,24 @@ screen_size = pygame.display.Info()
 screen = pygame.display.set_mode((screen_size.current_w, screen_size.current_h))
 clock = pygame.time.Clock()
 
+### ### PLAYER SETTINGS ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
+PLAYER = {
+    "w" : 100,
+    "h" : 100,
+    "x" : (screen_size.current_w // 2) - 50,
+    "y" : (screen_size.current_h // 2) - 50, 
+    "speed" : 10,
+
+}
+IS_W_PRESSED = False
+IS_S_PRESSED = False
+IS_A_PRESSED = False
+IS_D_PRESSED = False
+
+running = True
+
+
+
 ### ### STAGE SETTINGS ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
 STAGE_X = 0
 STAGE_Y = 0
@@ -36,13 +54,57 @@ tile_map = [
     [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
 ]
 
+def colision (obj1, obj2):
+    return obj1['x'] < obj2['x']+obj2['w'] and obj1['x'] + obj1['w'] > obj2['y']  and  obj1['y'] < obj2['y']+obj2['h'] and obj1['y'] + obj1['h'] > obj2['y']
+
+def side_colision(obj1, obj2):    
+    dist_left = obj2['x'] - (obj1['x'] + obj1['w'])
+    dist_right = (obj2['x'] + obj2['w']) - obj1['x']
+    dist_top = obj2['y'] - (obj1['y'] + obj1['h'])
+    dist_bottom = (obj2['y'] + obj2['h']) - obj1['y']
+
+    min_distance = min(dist_left, dist_right, dist_top, dist_bottom)
+    if min_distance == dist_left:
+        return "LEFT"
+    elif min_distance == dist_right:
+        return "RIGHT"
+    elif min_distance == dist_top:
+        return "UP"
+    elif min_distance == dist_bottom:
+        return "DOWN"
+
+    return False
+
+        
+
 def draw_map():
+    global IS_A_PRESSED, IS_D_PRESSED, IS_S_PRESSED, IS_W_PRESSED
     for y, row in enumerate(tile_map):
         for x, tile in enumerate(row):
             if tile == 0:
                 screen.blit(scaled_grass, (x * TILE_SIZE + STAGE_X, y * TILE_SIZE + STAGE_Y))
-            elif tile == 1:
+            elif tile == 1: ### wall
                 screen.blit(scaled_wall, (x * TILE_SIZE + STAGE_X, y * TILE_SIZE + STAGE_Y))
+                OBJECT = {
+                    'x' : x * TILE_SIZE + STAGE_X,
+                    'y' : y * TILE_SIZE + STAGE_Y,
+                    'w' : TILE_SIZE,
+                    'h' : TILE_SIZE
+                }
+                if(colision(PLAYER, OBJECT)):
+                    COLISION = side_colision(PLAYER, OBJECT)
+                    if COLISION == "UP":
+                        IS_W_PRESSED = False
+                        print("up")
+                    if COLISION == "DOWN":
+                        IS_S_PRESSED = False
+                        print("down")
+                    if COLISION == "LEFT":
+                        IS_A_PRESSED = False
+                        print("left")
+                    if COLISION == "RIGHT":
+                        IS_D_PRESSED = False
+                        print("right")
 
 
 ### ### COLORS ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
@@ -65,17 +127,7 @@ colores = {
     "plateado": (192, 192, 192),
 }
 
-### ### PLAYER SETTINGS ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
 
-PLAYER_X = (screen_size.current_w // 2) - 50
-PLAYER_Y = (screen_size.current_h // 2) - 50
-PLAYER_SPEED = 10
-IS_W_PRESSED = False
-IS_S_PRESSED = False
-IS_A_PRESSED = False
-IS_D_PRESSED = False
-
-running = True
 
 ### ### bucle principal ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
 
@@ -109,20 +161,23 @@ while running:
 
     ### ### logica ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ###
 
-    ### ### player move 
-    if IS_A_PRESSED:
-        STAGE_X += PLAYER_SPEED
-    if IS_D_PRESSED:
-        STAGE_X -= PLAYER_SPEED
-    if IS_S_PRESSED:
-        STAGE_Y -= PLAYER_SPEED
-    if IS_W_PRESSED:
-        STAGE_Y += PLAYER_SPEED
+    
+
+    ### ### screen drawing
 
     screen.fill(colores["negro" ])
     draw_map()
-    print(PLAYER_X, PLAYER_Y)
-    pygame.draw.rect(screen, colores["rojo"], [PLAYER_X, PLAYER_Y , 100, 100])
+    pygame.draw.rect(screen, colores["rojo"], [PLAYER["x"], PLAYER['y'] , PLAYER['w'], PLAYER['h']])
+
+    ### ### player movement
+    if IS_A_PRESSED:
+        STAGE_X += PLAYER['speed']
+    if IS_D_PRESSED:
+        STAGE_X -= PLAYER['speed']
+    if IS_S_PRESSED:
+        STAGE_Y -= PLAYER['speed']
+    if IS_W_PRESSED:
+        STAGE_Y += PLAYER['speed']
 
 
     
