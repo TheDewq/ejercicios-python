@@ -8,7 +8,9 @@ screen_size = pygame.display.Info()
 screen = pygame.display.set_mode((screen_size.current_w, screen_size.current_h))
 clock = pygame.time.Clock()
 
-### ### SCENARY SETTINGS ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
+### ### STAGE SETTINGS ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
+STAGE_X = 0
+STAGE_Y = 0
 
 SCALE_TILE = (int((screen_size.current_w)/10), int((screen_size.current_w)/10))
 TILE_SIZE = int((screen_size.current_w)/10) 
@@ -38,9 +40,9 @@ def draw_map():
     for y, row in enumerate(tile_map):
         for x, tile in enumerate(row):
             if tile == 0:
-                screen.blit(scaled_grass, (x * TILE_SIZE, y * TILE_SIZE))
+                screen.blit(scaled_grass, (x * TILE_SIZE + STAGE_X, y * TILE_SIZE + STAGE_Y))
             elif tile == 1:
-                screen.blit(scaled_wall, (x * TILE_SIZE, y * TILE_SIZE))
+                screen.blit(scaled_wall, (x * TILE_SIZE + STAGE_X, y * TILE_SIZE + STAGE_Y))
 
 
 ### ### COLORS ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### 
@@ -67,7 +69,7 @@ colores = {
 
 PLAYER_X = (screen_size.current_w // 2) - 50
 PLAYER_Y = (screen_size.current_h // 2) - 50
-PLAYER_SPEED = 5
+PLAYER_SPEED = 10
 IS_W_PRESSED = False
 IS_S_PRESSED = False
 IS_A_PRESSED = False
@@ -109,13 +111,13 @@ while running:
 
     ### ### player move 
     if IS_A_PRESSED:
-        print("nose")
+        STAGE_X += PLAYER_SPEED
     if IS_D_PRESSED:
-        print("nose")
+        STAGE_X -= PLAYER_SPEED
     if IS_S_PRESSED:
-        print("nose")
+        STAGE_Y -= PLAYER_SPEED
     if IS_W_PRESSED:
-        print("nose")
+        STAGE_Y += PLAYER_SPEED
 
     screen.fill(colores["negro" ])
     draw_map()
