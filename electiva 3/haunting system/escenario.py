@@ -2,4 +2,6 @@ import pygame
 
 
 def simple():
-    print("hola")
+    container_width = 250
+    container_heigth = 250
+    pygame.
